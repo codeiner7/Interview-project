@@ -28,8 +28,8 @@ export default function Weather() {
             
             {/* Temperature */}
             <div className="flex flex-col items-center">
-                <p className="text-xl font-semibold">{weather.main.temp}°C</p>
-                <p className="text-xs">{weather.weather[0].description}</p>
+            <p className="text-xl font-semibold">{Math.ceil(weather.main.temp)}°C</p>
+            <p className="text-xs">{weather.weather[0].description}</p>
             </div>
             
             {/* Wind Speed */}

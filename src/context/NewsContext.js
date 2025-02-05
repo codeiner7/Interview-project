@@ -13,6 +13,8 @@ const initialState = {
   weather: null,
   weatherLoading: true,
   weatherError: null,
+  // Mobile Hamburger Icon toggle
+  hamburgerIconOpen: false,
 
 };
 
@@ -54,6 +56,9 @@ function newsReducer(state, action) {
           return {...state, weather: action.payload, weatherLoading: false}
           case "SET_WEATHER_ERROR":
             return {...state, weatherError: action.payload, weatherLoading: false}
+            // case for toggling the hamburger icon
+            case "SET_TOGGLE":
+              return {...state, hamburgerIconOpen: !state.hamburgerIconOpen}
 
     default:
       console.log(action);

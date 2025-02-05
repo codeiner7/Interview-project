@@ -6,6 +6,10 @@ import { MdFavorite } from "react-icons/md";
 import { Link } from "react-router-dom";
 import useWeather from "../hooks/useWeather";
 import Weather from "./Weather";
+import { TbXboxX } from "react-icons/tb";
+import { GiHamburgerMenu } from "react-icons/gi";
+
+
 
 const NewsList = () => {
   useNews(); // Fetch news using the custom hook
@@ -20,7 +24,10 @@ const NewsList = () => {
     currentPage,
     itemsPerPage,
     favorites,
+    hamburgerIconOpen
   } = state;
+
+
 
   const filteredNews =
     newsCategory === "All"
@@ -34,6 +41,10 @@ const NewsList = () => {
 
   function handeCategoryChange(e) {
     dispatch({ type: "SET_CATEGORY", payload: e.target.value });
+  }
+
+  function handleToggle() {
+    dispatch({type: "SET_TOGGLE"})
   }
 
   useEffect(() => {
@@ -50,23 +61,66 @@ const NewsList = () => {
 
   return (
     <div className="max-w-6xl mx-auto px-4">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-indigo-600 shadow-md hover:underline">
-          Latest News
-        </h2>
 
-        <Link
-          to="/favorites"
-          className="flex items-center space-x-1 text-blue-600 hover:text-indigo-600 transition duration-300"
-        >
-          <MdFavorite className="text-3xl text-red-500" />
-          <span className="bg-red-500 text-white rounded-full px-2 py-0.5 text-sm">
-            {favorites.length}
-          </span>
-        </Link>
-        
-        <Weather />  
-      </div>
+<div className="flex justify-between items-center mb-4">
+  {/* Latest News Title */}
+  <h2 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-indigo-600 shadow-md hover:underline">
+    Latest News
+  </h2>
+
+  {/* Favorites Icon and Count (Visible on larger screens) */}
+  <div className="hidden sm:flex items-center space-x-1 text-blue-600 hover:text-indigo-600 transition duration-300">
+    <Link to="/favorites" className="flex items-center">
+      <MdFavorite className="text-3xl text-red-500" />
+      <span className="bg-red-500 text-white rounded-full px-2 py-0.5 text-sm">
+        {favorites.length}
+      </span>
+    </Link>
+  </div>
+
+  {/* Weather Info (Visible on larger screens) */}
+  <div className="hidden sm:flex items-center space-x-2">
+    <Weather />
+  </div>
+
+  {/* Hamburger Icon for small screens (Visible on small screens) */}
+  <div className="sm:hidden flex items-center">
+    <button onClick={handleToggle} className="text-gray-600">
+      {hamburgerIconOpen ? <TbXboxX className="text-4xl"></TbXboxX> : <GiHamburgerMenu className="text-4xl"></GiHamburgerMenu> }
+    </button>
+  </div>
+</div>
+
+{hamburgerIconOpen && (
+  <div className="fixed top-0 left-0 right-0 bottom-0 bg-white z-50 flex flex-col items-center p-4 space-y-4 sm:hidden">
+    {/* Close icon positioned to the top right */}
+    <TbXboxX 
+      onClick={() => dispatch({ type: "SET_TOGGLE" })} 
+      className="text-4xl text-blue-600 cursor-pointer absolute top-2 right-4"
+    />
+
+    {/* Favorites Link */}
+    <Link
+      to="/favorites"
+      className="flex items-center justify-center space-x-2 text-blue-600 hover:text-indigo-600 transition duration-300"
+      onClick={() => dispatch({ type: "SET_TOGGLE" })} // Close the menu when clicked
+    >
+      <MdFavorite className="text-3xl text-red-500" />
+      <span className="bg-red-500 text-white rounded-full px-2 py-0.5 text-sm">
+        {favorites.length}
+      </span>
+    </Link>
+
+    {/* Weather Component */}
+    <div className="text-center space-y-2">
+      <Weather />
+    </div>
+  </div>
+)}
+
+
+
+
 
       <div className="mb-4">
         <select
